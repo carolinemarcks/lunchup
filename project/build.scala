@@ -33,7 +33,10 @@ object LunchupBuild extends Build {
         "org.apache.commons" % "commons-jexl" % "2.1.1",
         "org.apache.commons" % "commons-lang3" % "3.0",
         "com.googlecode.concurrentlinkedhashmap" % "concurrentlinkedhashmap-lru" % "1.4.2",
-        "org.json4s" %% "json4s-native" % "3.3.0"
+        "org.json4s" %% "json4s-native" % "3.3.0",
+        "com.typesafe.slick" %% "slick" % "3.0.2",
+        "com.h2database" % "h2" % "1.4.181",
+        "com.mchange" % "c3p0" % "0.9.5.1"
       ),
       scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
         Seq(
