@@ -2,7 +2,8 @@ package com.lunchup
 
 import java.io.{InputStream, OutputStream}
 import java.net.InetSocketAddress
-import de.neuland.jade4j.Jade4J
+import de.neuland.jade4j.{Jade4J, JadeConfiguration} 
+import de.neuland.jade4j.template.{TemplateLoader, FileTemplateLoader}
 
 import com.sun.net.httpserver.{HttpExchange, HttpHandler, HttpServer}
 
@@ -50,10 +51,14 @@ class RootHandler extends HttpHandler {
       .takeWhile(-1 !=)
       .foreach(out.write)
   }
+  private val templateName = "index.jade"
+  private def buildModel: java.util.Map[String,Object] = {
+    new java.util.HashMap[String, Object]();
+  }
 
   private def sendResponse(t: HttpExchange) {
-    val model: java.util.Map[String, Object] = new java.util.HashMap[String, Object]();
-    val template = Jade4J.getTemplate("index.jade")
+    val model: java.util.Map[String, Object] = buildModel 
+    val template = Jade4J.getTemplate(s"templates/$templateName")
     val response = Jade4J.render(template, model)
 
     t.sendResponseHeaders(200, response.length())

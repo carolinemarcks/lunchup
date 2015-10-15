@@ -3,6 +3,7 @@ lazy val root = (project in file(".")).
     name := "lunchup",
     libraryDependencies ++= Seq(
       "org.apache.commons" % "commons-io" % "1.3.2",
-      "org.apache.commons" % "commons-lang3" % "3.0"
+      "org.apache.commons" % "commons-lang3" % "3.0",
+      "com.googlecode.concurrentlinkedhashmap" % "concurrentlinkedhashmap-lru" % "1.4.2"
 	)
   )
