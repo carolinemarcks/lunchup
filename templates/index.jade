@@ -4,3 +4,7 @@ html
     title= pageName
   body
     p #{text} 
+    ol#books
+      for book in books
+        li #{book.name} 
+  

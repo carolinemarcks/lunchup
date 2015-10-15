@@ -56,10 +56,13 @@ class RootHandler extends HttpHandler {
   }
   private val templateName = "index.jade"
   private def buildModel: java.util.Map[String,Object] = {
-
     val model = new java.util.HashMap[String, Object]()
+    val books = new java.util.ArrayList[Book]()
+    books.add(new Book("asdfa"))
+
     model.put("pageName", "LunchUp")
     model.put("text", "Hey There")
+    model.put("books", books)
     model
   }
 
