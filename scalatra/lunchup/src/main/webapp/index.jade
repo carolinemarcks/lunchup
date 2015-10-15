@@ -1,0 +1,10 @@
+-@ val pageName: String
+-@ val text: String
+
+!!! 5
+html
+  head
+    title= pageName
+    link{:rel => "stylesheet", :type =>"text/css", :href => "/css/base.css"}
+  body
+    p #{text}
