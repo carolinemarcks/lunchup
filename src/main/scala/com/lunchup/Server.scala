@@ -4,6 +4,9 @@ import java.io.{InputStream, OutputStream}
 import java.net.InetSocketAddress
 import de.neuland.jade4j.{Jade4J, JadeConfiguration} 
 import de.neuland.jade4j.template.{TemplateLoader, FileTemplateLoader}
+import org.json4s._
+import org.json4s.JsonDSL._
+import org.json4s.native.JsonMethods._
 
 import com.sun.net.httpserver.{HttpExchange, HttpHandler, HttpServer}
 
@@ -53,7 +56,11 @@ class RootHandler extends HttpHandler {
   }
   private val templateName = "index.jade"
   private def buildModel: java.util.Map[String,Object] = {
-    new java.util.HashMap[String, Object]();
+
+    val model = new java.util.HashMap[String, Object]()
+    model.put("pageName", "LunchUp")
+    model.put("text", "Hey There")
+    model
   }
 
   private def sendResponse(t: HttpExchange) {
@@ -61,10 +68,13 @@ class RootHandler extends HttpHandler {
     val template = Jade4J.getTemplate(s"templates/$templateName")
     val response = Jade4J.render(template, model)
 
+    println(response)
+
     t.sendResponseHeaders(200, response.length())
     val os = t.getResponseBody
     os.write(response.getBytes)
     os.close()
   }
-
 }
+
+
