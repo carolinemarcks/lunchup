@@ -2,6 +2,7 @@ package com.lunchup
 
 import java.io.{InputStream, OutputStream}
 import java.net.InetSocketAddress
+import de.neuland.jade4j.Jade4J
 
 import com.sun.net.httpserver.{HttpExchange, HttpHandler, HttpServer}
 
@@ -51,7 +52,10 @@ class RootHandler extends HttpHandler {
   }
 
   private def sendResponse(t: HttpExchange) {
-    val response = "Ack!"
+    val model: java.util.Map[String, Object] = new java.util.HashMap[String, Object]();
+    val template = Jade4J.getTemplate("index.jade")
+    val response = Jade4J.render(template, model)
+
     t.sendResponseHeaders(200, response.length())
     val os = t.getResponseBody
     os.write(response.getBytes)
