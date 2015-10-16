@@ -1,9 +1,9 @@
-<% import org.scalatra.example.models.Person %>
-<% import org.scalatra.example.models.Connection %>
-<% import org.scalatra.example.models.Team %>
-<% import org.scalatra.example.models.TeamPerson %>
-<% import org.scalatra.example.models.Role %>
-<% import org.scalatra.example.models.RolePerson %>
+<% import com.lunchup.models.Person %>
+<% import com.lunchup.models.Connection %>
+<% import com.lunchup.models.Team %>
+<% import com.lunchup.models.TeamPerson %>
+<% import com.lunchup.models.Role %>
+<% import com.lunchup.models.RolePerson %>
 
 <% import org.squeryl.Query %>
 <%@ val persons:Query[Person]%>

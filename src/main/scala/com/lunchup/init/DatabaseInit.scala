@@ -1,4 +1,4 @@
-package org.scalatra.example.data
+package com.lunchup.init
 
 import com.mchange.v2.c3p0.ComboPooledDataSource
 import org.squeryl.adapters.{H2Adapter, MySQLAdapter}

@@ -1,13 +1,12 @@
-package org.scalatra.example
+package com.lunchup
 
-import org.scalatra.example.data.DatabaseInit
+import com.lunchup.init.DatabaseInit
 import org.scalatra.test.scalatest._
 import org.scalatest.{ FunSuite, BeforeAndAfter }
-import org.scalatra.example.models.BlogDb
 import org.h2.engine.Session
 
-class ArticlesControllerTest extends ScalatraSuite with DatabaseInit with FunSuite with BeforeAndAfter {
-  addServlet(classOf[ArticlesController], "/*")
+class LunchupControllerTest extends ScalatraSuite with DatabaseInit with FunSuite with BeforeAndAfter {
+  addServlet(classOf[LunchupController], "/*")
   
   before {
     configureDb()

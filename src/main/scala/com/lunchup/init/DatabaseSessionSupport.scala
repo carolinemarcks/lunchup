@@ -1,4 +1,4 @@
-package org.scalatra.example.data
+package com.lunchup.init
 
 import org.squeryl.Session
 import org.squeryl.SessionFactory

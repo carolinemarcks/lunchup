@@ -1,4 +1,4 @@
-package org.scalatra.example.models
+package com.lunchup.models
 
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.Schema
@@ -104,3 +104,5 @@ object LunchupDb extends Schema {
     r.id is(autoIncremented)
   ))
 }
+
+trait ScalatraRecord extends KeyedEntity[Long] with PersistenceStatus {}

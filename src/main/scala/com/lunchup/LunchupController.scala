@@ -1,18 +1,12 @@
-package org.scalatra.example
+package com.lunchup
 
+import com.lunchup.init.{DatabaseInit, DatabaseSessionSupport}
+import com.lunchup.models.{LunchupDb, Person}
 import org.scalatra._
 import scalate.ScalateSupport
-import org.scalatra.example.data.DatabaseInit
-import org.scalatra.example.data.DatabaseSessionSupport
-import org.scalatra.example.models.Article
-import org.scalatra.example.models.BlogDb
-import org.scalatra.example.models.Person
-import org.scalatra.example.models.LunchupDb
 import org.squeryl.PrimitiveTypeMode._
-import java.util.Random
-import java.util.Collections
 
-class ArticlesController extends ScalatraServlet 
+class LunchupController extends ScalatraServlet
   with SessionSupport
 	with DatabaseSessionSupport 
 	with ScalateSupport
@@ -42,7 +36,6 @@ class ArticlesController extends ScalatraServlet
   get("/create-db") {
     contentType = "text/html"
 
-    BlogDb.create
     LunchupDb.create
     redirect("/")
   }
