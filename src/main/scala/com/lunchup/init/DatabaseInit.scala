@@ -11,12 +11,12 @@ trait DatabaseInit {
 
   val databaseUsername = "root"
   val databasePassword = ""
-  val databaseConnection = "jdbc:h2:mem:squeryltryout"
+  val databaseConnection = "jdbc:mysql://localhost:3306/lunchup"
 
   var cpds = new ComboPooledDataSource
 
   def configureDb() {
-    cpds.setDriverClass("org.h2.Driver")
+    cpds.setDriverClass("com.mysql.jdbc.Driver")
     cpds.setJdbcUrl(databaseConnection)
     cpds.setUser(databaseUsername)
     cpds.setPassword(databasePassword)
