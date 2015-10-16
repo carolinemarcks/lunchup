@@ -1,0 +1,19 @@
+<div class="photoContainer">
+	<img src="/assets/photos/yvettepasqua.jpg" alt="Profile Photo for Yvette Pasqua" class="profilePhoto">
+</div>
+
+<div class="lunchdateInfo">
+	<h1>Yvette Pasqua</h1>
+	<p>CTO on the 10th floor <a href="">(floor plan)</a><br />
+	Teams: N/A
+	</p>
+
+		<p>Lunchups: 4 <br />
+		<img src="/assets/meter.jpg" style="width: 200px; height: 20px; margin: 5px;"><br />
+		<a href="">(2 more until your free lunch!)</a></p>
+</div>
+
+<div id="profileStats">
+	<p>Food preferences:<br />
+	<a href="http://www.yelp.com/search?find_desc=breakfast%20food&find_loc=632+broadway%2C+ny&ns=1" target="_blank">breakfast food</a>, <a href="http://www.yelp.com/search?find_desc=tasty+food&find_loc=632+broadway,+ny" target="_blank">tasty food</a>, <a href="http://www.yelp.com/search?find_desc=Food+Trucks&find_loc=632+broadway,+ny" target="_blank">food trucks</a>
+</div>

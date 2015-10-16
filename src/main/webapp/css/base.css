@@ -31,14 +31,19 @@ body {
 	border: 1px solid #ff7777;
 }
 
-@media screen and (max-device-width : 500px) {
-	body {
-		width: 90%;
-		margin: 1em auto;
-	}
+@media screen and (max-device-width : 550px) {
 
 	#container {
 		padding: 15px 20px 30px;
+		margin: 10px;
+	}
+}
+
+@media screen and (max-device-width : 620px) and (min-device-width : 550px) {
+
+	#container {
+		padding: 15px 20px 30px;
+		margin: 10px auto;
 	}
 }
 
@@ -98,20 +103,22 @@ img.profilePhoto {
 	text-align: center;
 }
 
-.lunchdateInfo p {
-	line-height: 0.5em;
-}
-
 .lunchdateInfo a {
 	font-size: 0.75em;
+}
+
+.lunchdateInfo p {
+	line-height: 1em;
+	margin-top:0;
 }
 
 .lunchdateInfo h1 {
 	line-height: 1em;
 	font-weight: normal;
+	margin-bottom: 0.25em;
 }
 
-#venueRecs {
+#venueRecs, #profileStats {
 	color: #bbb;
 	font-size:13px;
 }
@@ -120,7 +127,7 @@ img.profilePhoto {
 	margin: 40px auto 0;
 }
 
-#venueRecs a {
+#venueRecs a, #profileStats a {
 	font-size: 0.75em;
 	color: #bbb;
 }

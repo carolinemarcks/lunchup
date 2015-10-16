@@ -70,6 +70,10 @@ class LunchupController extends ScalatraServlet
       }
     } getOrElse ssp("/index_fail.ssp", "err" -> "Please supply a name!")
   }
+  get("/profile") {
+    contentType = "text/html"
+    ssp("/profile.ssp")
+  }
   get("/mymatch") {
     contentType = "text/html"
     params.get("name") map { name =>

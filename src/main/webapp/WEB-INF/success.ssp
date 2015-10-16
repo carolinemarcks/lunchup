@@ -5,4 +5,4 @@
 
 <h1>Got it!</h1>
 
-<p>Thanks <%=person.name%>! Keep an eye on your inbox or slack around [time]. We'll be sending everyone their lunchup matches then!</p>
+<p>Thanks <%=person.name%>! Keep an eye on your inbox or slack. We'll be sending everyone their lunchup matches in a couple of hours.</p>
