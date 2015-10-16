@@ -34,30 +34,6 @@ object Connection {
     }
   }
 }
-class Team(val id: Long, val name: String) extends ScalatraRecord {
-  def this() = this(0, "no name")
-}
-object Team {
-  def create(team: Team): Boolean = {
-    inTransaction {
-      val result = LunchupDb.teams.insert(team)
-      result.isPersisted
-    }
-  }
-}
-
-class TeamPerson(val personId: Long, val teamId: Long) extends KeyedEntity[CompositeKey2[Long,Long]] with PersistenceStatus {
-  def id = compositeKey(personId, teamId);
-  def this() = this(0,0)
-}
-object TeamPerson {
-  def create(teamPerson: TeamPerson): Boolean = {
-    inTransaction {
-      val result = LunchupDb.teamPersons.insert(teamPerson)
-      result.isPersisted
-    }
-  }
-}
 
 class Role(val id: Long, val name: String) extends ScalatraRecord {
   def this() = this(0, "no name")
@@ -88,8 +64,6 @@ object RolePerson {
 object LunchupDb extends Schema {
   val persons = table[Person]("persons")
   val connections = table[Connection]("connections")
-  val teams = table[Team]("teams")
-  val teamPersons = table[TeamPerson]("team_persons")
   val roles = table[Role]("roles")
   val rolePersons = table[RolePerson]("role_persons")
 
@@ -97,9 +71,6 @@ object LunchupDb extends Schema {
     p.id is(autoIncremented),
     p.name is(unique)
     ))
-  on(teams)(t => declare (
-    t.id is(autoIncremented)
-  ))
   on(roles)(r => declare(
     r.id is(autoIncremented)
   ))

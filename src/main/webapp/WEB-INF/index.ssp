@@ -1,15 +1,11 @@
 <% import com.lunchup.models.Person %>
 <% import com.lunchup.models.Connection %>
-<% import com.lunchup.models.Team %>
-<% import com.lunchup.models.TeamPerson %>
 <% import com.lunchup.models.Role %>
 <% import com.lunchup.models.RolePerson %>
 
 <% import org.squeryl.Query %>
 <%@ val persons:Query[Person]%>
 <%@ val connections:Query[Connection]%>
-<%@ val teams:Query[Team]%>
-<%@ val teamPersons:Query[TeamPerson]%>
 <%@ val roles:Query[Role]%>
 <%@ val rolePersons:Query[RolePerson]%>
 
@@ -26,19 +22,6 @@
         <p><%= connection.pAId %> -> <%= connection.pBId %></p>
     #end
   </div>
-  <div class="span8">
-    <h2>Teams</h2>
-    #for(team <- teams.toList)
-        <p><%= team.name %> </p>
-    #end
-  </div>
-  <div class="span8">
-    <h2>TeamPerson</h2>
-    #for(tp <- teamPersons.toList)
-        <p><%= tp.teamId %> -> <%= tp.personId %></p>
-    #end
-  </div>
-
   <div class="span8">
     <h2>Roles</h2>
     #for(role <- roles.toList)

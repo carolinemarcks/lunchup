@@ -17,8 +17,6 @@ class LunchupController extends ScalatraServlet
     contentType = "text/html"
     val persons = from(LunchupDb.persons)(select(_))
     val connections = from(LunchupDb.connections)(select(_))
-    val teams = from(LunchupDb.teams)(select(_))
-    val teamPersons = from(LunchupDb.teamPersons)(select(_))
     val roles = from(LunchupDb.roles)(select(_))
     val rolePersons = from(LunchupDb.rolePersons)(select(_))
     println(persons.toList)
@@ -26,8 +24,6 @@ class LunchupController extends ScalatraServlet
     ssp("/index",
       "persons" -> persons,
       "connections" -> connections,
-      "teams" -> teams,
-      "teamPersons" -> teamPersons,
       "roles" -> roles,
       "rolePersons" -> rolePersons
     )
@@ -46,7 +42,7 @@ class LunchupController extends ScalatraServlet
           "pageName" -> "LunchUp",
           "text" -> "Hey There")
   }
-  
+
   post("/person/:name") {
     val name = params("name")
     println(s"got a person $name")
