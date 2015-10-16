@@ -54,24 +54,22 @@ class LunchupController extends ScalatraServlet
   get("/lunchme") {
     contentType = "text/html"
 
-    val name = params("name")
-    if (name != "") {
+    params.get("name").map { name =>
       try {
         val person = from(LunchupDb.persons)(p => where(p.name === name) select(p)).toList.head
         ssp("/lunchme.ssp",
           "person" -> person
         )
       } catch {
-        case e => println(e)
+        case e: Throwable => println(e)
           ssp("/fail.ssp",
             "err" -> s"Sorry, we couldn't find $name in our database")
       }
-    } else ssp("/fail.ssp", "err" -> "Please supply a name!")
+    } getOrElse ssp("/fail.ssp", "err" -> "Please supply a name!")
   }
   get("/mymatch") {
     contentType = "text/html"
-    val name = params("name")
-    if (name != "") {
+    params.get("name") map { name =>
       try {
         val me = from(LunchupDb.persons)(p => where(p.name === name) select(p)).toList.head
         try {
@@ -88,14 +86,14 @@ class LunchupController extends ScalatraServlet
         } catch {
           case e: Throwable => println(e)
             ssp("/fail.ssp",
-              "err" -> s"Sorry, $name, we don't have a match for you right now!")
+              "err" -> s"Sorry $name, we don't have a match for you right now!")
         }
       } catch {
         case e: Throwable => println(e)
           ssp("/fail.ssp",
             "err" -> s"Sorry, we couldn't find $name in our database")
       }
-    } else ssp("/fail.ssp", "err" -> "Please supply a name!")
+    } getOrElse ssp("/fail.ssp", "err" -> "Please supply a name!")
   }
 
   post("/person/:name") {
