@@ -1,3 +1,8 @@
+<% import com.lunchup.models.Person %>
+
+<% import org.squeryl.Query %>
+<%@ val person:Person%>
+
 <h1>Got it!</h1>
 
-<p>Thanks yourName! Keep an eye on your inbox or slack around [time]. We'll be sending everyone their lunchup matches then!</p>
+<p>Thanks <%=person.name%>! Keep an eye on your inbox or slack around [time]. We'll be sending everyone their lunchup matches then!</p>

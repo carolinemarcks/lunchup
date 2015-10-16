@@ -60,15 +60,15 @@ class LunchupController extends ScalatraServlet
       try {
         val person = from(LunchupDb.persons)(p => where(p.name === name) select(p)).toList.head
         //would do inserting of MatchRequest into DB here, but not for hackathon
-        ssp("/lunchme.ssp",
+        ssp("/success.ssp",
           "person" -> person
         )
       } catch {
         case e: Throwable => println(e)
-          ssp("/fail.ssp",
+          ssp("/index_fail.ssp",
             "err" -> s"Sorry, we couldn't find $name in our database")
       }
-    } getOrElse ssp("/fail.ssp", "err" -> "Please supply a name!")
+    } getOrElse ssp("/index_fail.ssp", "err" -> "Please supply a name!")
   }
   get("/mymatch") {
     contentType = "text/html"
@@ -82,21 +82,21 @@ class LunchupController extends ScalatraServlet
               orderBy (matchResult.id desc)
           ).toList.head
 
-          ssp("/myMatch.ssp",
+          ssp("/results.ssp",
             "me" -> me,
             "myMatch" -> myMatch
           )
         } catch {
           case e: Throwable => println(e)
-            ssp("/fail.ssp",
+            ssp("/index_fail.ssp",
               "err" -> s"Sorry $name, we don't have a match for you right now!")
         }
       } catch {
         case e: Throwable => println(e)
-          ssp("/fail.ssp",
+          ssp("/index_fail.ssp",
             "err" -> s"Sorry, we couldn't find $name in our database")
       }
-    } getOrElse ssp("/fail.ssp", "err" -> "Please supply a name!")
+    } getOrElse ssp("/index_fail.ssp", "err" -> "Please supply a name!")
   }
   post("/makeMatchRequests") {
     contentType = "text/html"

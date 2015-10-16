@@ -1,7 +1,12 @@
-
+<%@ val err:String%>
 <div class="alignCenter"><img src="/assets/lunchupLogo.png" alt="LunchUp Logo"></div>	
 
 <p>Grab lunch with people around the office you don't normally get to hang out with! Just put in your name, and we'll do the rest.</p>
+
+
+<div id="error">
+	<p><%= err %></p>
+</div>
 
 <form action="/lunchme">
 	<input type="text" name="name" placeholder="My full name is...">

@@ -29,7 +29,6 @@ body {
 #error {
 	background-color: #ffe7e7;
 	border: 1px solid #ff7777;
-	display: none;
 }
 
 @media screen and (max-device-width : 500px) {
