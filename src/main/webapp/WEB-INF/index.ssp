@@ -1,38 +1,14 @@
-<% import com.lunchup.models.Person %>
-<% import com.lunchup.models.Connection %>
-<% import com.lunchup.models.Role %>
-<% import com.lunchup.models.RolePerson %>
+<div class="alignCenter"><img src="/assets/lunchupLogo.png" alt="LunchUp Logo"></div>	
 
-<% import org.squeryl.Query %>
-<%@ val persons:Query[Person]%>
-<%@ val connections:Query[Connection]%>
-<%@ val roles:Query[Role]%>
-<%@ val rolePersons:Query[RolePerson]%>
+<p>Grab lunch with people around the office you don't normally get to hang out with! Just put in your name, and we'll do the rest.</p>
 
-<div class="row">
-  <div class="span8">
-    <h2>Persons</h2>
-    #for(person <- persons.toList)
-        <p><%= person.name %></p>
-    #end
-  </div>
-  <div class="span8">
-    <h2>Connections</h2>
-    #for(connection <- connections.toList)
-        <p><%= connection.pAId %> -> <%= connection.pBId %></p>
-    #end
-  </div>
-  <div class="span8">
-    <h2>Roles</h2>
-    #for(role <- roles.toList)
-        <p><%= role.name %> </p>
-    #end
-  </div>
-  <div class="span8">
-    <h2>RolePersons</h2>
-    #for(rp <- rolePersons.toList)
-        <p><%= rp.roleId %> -> <%= rp.personId %></p>
-    #end
-  </div>
+<div id="error">
+	<p>Sorry, we didn't quite catch that. Can you try again?</p>
+</div>
+
+<form action="/success">
+	<input type="text" name="userName" placeholder="My full name is...">
+	<input type="submit" value="Let's grab lunch!" id="btnSubmit">
+</form>
 
 </div>

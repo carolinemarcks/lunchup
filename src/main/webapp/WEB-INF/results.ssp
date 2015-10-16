@@ -1,0 +1,15 @@
+<p class="alignCenter">Congrats, yourName! You'll be grabbing lunch with:</p>
+
+<div class="photoContainer">
+	<img src="/assets/profilePhoto_default.png" alt="Profile Photo for [name]" class="profilePhoto">
+</div>
+
+<div class="lunchdateInfo">
+	<h1>Laura Mipsum</h1>
+	<p>10th floor <a href="">(floor plan)</a></p>
+</div>
+
+<div id="venueRecs">
+	<p>Not sure what to eat? Try these:<br />
+	<a href="http://www.yelp.com/biz/taim-falafel-new-york">Taim Falafel</a>, <a href="http://www.yelp.com/biz/il-corallo-trattoria-new-york">Il Corallo Trattoria</a>, <a href="http://www.yelp.com/biz/v-nam-cafe-new-york">V-Nam Cafe</a>
+</div>

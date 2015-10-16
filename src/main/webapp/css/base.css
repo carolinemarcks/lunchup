@@ -1,3 +1,127 @@
 body {
-  background-color: #d0e4fe;
-  }
+  font-family: helvetica;
+  color: #333333;
+  background-color: #ccc;
+  text-align: left;
+  line-height: 1.5em;
+}
+
+#background {
+	background-image: url("/assets/LOOKATMYPIEYES.jpg");
+	background-position: 60% 40%;
+  	background-repeat: no-repeat;
+  	background-size: cover;
+  	bottom: 0;
+  	left: 0;
+  	position: absolute;
+  	right: 0;
+  	top: 0;
+}
+
+#container {
+	background-color: #fff;
+	padding: 30px 50px 70px;
+	margin: 20px auto;
+	text-align: center;
+	max-width: 500px;
+}
+
+#error {
+	background-color: #ffe7e7;
+	border: 1px solid #ff7777;
+	display: none;
+}
+
+@media screen and (max-device-width : 500px) {
+	body {
+		width: 90%;
+		margin: 1em auto;
+	}
+
+	#container {
+		padding: 15px 20px 30px;
+	}
+}
+
+p {
+	font-size: 16px;
+}
+
+h1 {
+	text-align: center;
+	color: #555;
+	line-height: 1em;
+	font-weight: normal;
+}
+
+.alignCenter {
+	text-align: center;
+}
+
+input[type=text] {
+	font-size: 1em;
+	width: 200px;
+	padding: 5px; 
+	margin: 10px auto;
+	border: 1px solid #ddd; 
+	border-radius: 2px;
+	box-shadow: inset 0 1px 2px #dddddd;
+	display: block;
+	text-align: center;
+}
+
+#btnSubmit {
+	padding:10px 20px; 
+	font-size: 1em;
+	width: 210px;
+	font-weight: 700;
+	color: #fff;
+	background:#D0021B;
+	box-shadow: #851518 0 2px 0 0; 
+	border:0 none;
+	margin: 5px auto;
+	cursor:pointer;
+	border-radius: 5px; 
+}
+
+img.profilePhoto {
+	width: 150px;
+	height: 150px;
+	border-radius:999px;
+}
+
+.photoContainer {
+	margin: 0 auto;
+	width: 150px;
+}
+
+.lunchdateInfo {
+	text-align: center;
+}
+
+.lunchdateInfo p {
+	line-height: 0.5em;
+}
+
+.lunchdateInfo a {
+	font-size: 0.75em;
+}
+
+.lunchdateInfo h1 {
+	line-height: 1em;
+	font-weight: normal;
+}
+
+#venueRecs {
+	color: #bbb;
+	font-size:13px;
+}
+
+#venueRecs p {
+	margin: 40px auto 0;
+}
+
+#venueRecs a {
+	font-size: 0.75em;
+	color: #bbb;
+}
