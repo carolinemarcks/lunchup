@@ -1,0 +1,8 @@
+<% import com.lunchup.models.Person %>
+
+<% import org.squeryl.Query %>
+<%@ val person:Person%>
+
+<div class="row">
+  <p>Thanks, <%=person.name%>! We'll let you know when we've found a match for you.</p>
+</div>

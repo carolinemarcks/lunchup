@@ -22,7 +22,6 @@ class LunchupController extends ScalatraServlet
   get("/create-db") {
     contentType = "text/html"
 
-    LunchupDb.drop
     LunchupDb.create
     LunchupDb.persons.insert(SurveyData.getPersons())
     val persons = from(LunchupDb.persons)(select(_)).toList
@@ -32,6 +31,11 @@ class LunchupController extends ScalatraServlet
     LunchupDb.rolePersons.insert(SurveyData.getRolePersons(persons.toSet, roles.toSet))
 
     redirect("/")
+  }
+  get("/recreate-db") {
+    contentType = "text/html"
+    LunchupDb.drop
+    redirect("/create-db")
   }
   get("/allData") {
     contentType = "text/html"
@@ -55,14 +59,43 @@ class LunchupController extends ScalatraServlet
       try {
         val person = from(LunchupDb.persons)(p => where(p.name === name) select(p)).toList.head
         ssp("/lunchme.ssp",
-          "person" -> p
+          "person" -> person
         )
       } catch {
-        case e: java.util.NoSuchElementException => ssp("/fail.ssp", "name" -> name)
         case e => println(e)
-          ssp("/fail.ssp", "name" -> name)
+          ssp("/fail.ssp",
+            "err" -> s"Sorry, we couldn't find $name in our database")
       }
-    } else ssp("/fail.ssp", "name" -> name)
+    } else ssp("/fail.ssp", "err" -> "Please supply a name!")
+  }
+  get("/mymatch") {
+    contentType = "text/html"
+    val name = params("name")
+    if (name != "") {
+      try {
+        val me = from(LunchupDb.persons)(p => where(p.name === name) select(p)).toList.head
+        try {
+          val myMatch = from(LunchupDb.matchResults, LunchupDb.persons)((matchResult, person) =>
+            where(matchResult.personAId === me.id and matchResult.personBId === person.id)
+              select (person)
+              orderBy (matchResult.time)
+          ).toList.reverse.head
+
+          ssp("/myMatch.ssp",
+            "me" -> me,
+            "myMatch" -> myMatch
+          )
+        } catch {
+          case e: Throwable => println(e)
+            ssp("/fail.ssp",
+              "err" -> s"Sorry, $name, we don't have a match for you right now!")
+        }
+      } catch {
+        case e: Throwable => println(e)
+          ssp("/fail.ssp",
+            "err" -> s"Sorry, we couldn't find $name in our database")
+      }
+    } else ssp("/fail.ssp", "err" -> "Please supply a name!")
   }
 
   post("/person/:name") {

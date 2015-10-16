@@ -1,0 +1,7 @@
+<% import com.lunchup.models.Person %>
+<%@ val me:Person%>
+<%@ val myMatch:Person%>
+
+<div class="row">
+  <p>Hey, <%=me.name%>! You've been matched with <%myMatch.name%></p>
+</div>
