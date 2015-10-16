@@ -1,5 +1,8 @@
 package com.lunchup.data
 
+import com.lunchup.init.DatabaseSessionSupport
+import com.lunchup.models._
+
 object SurveyData {
   val roleAndBuddyContent = List(
 "Jake Levine,Dev,Rich Hsieh,Adrian Parsons,Evan Estola,,,,,,",
@@ -145,5 +148,74 @@ object SurveyData {
     (roleAndBuddyNames ++ teamNames).groupBy{
       case name => name
     }.mapValues {_.size}
+  }
+  def getPersons(): Set[Person] = {
+    val personNames = roleAndBuddyContent.flatMap { line =>
+      line.split(",").toList match {
+        case name::Nil => List(name)
+        case name:: _ :: moreNames => moreNames ++ List(name)
+        case _ => Nil
+      }
+    } ++ teamContent.flatMap { line =>
+      line.split(",").toList.headOption
+    }
+    val nonNilNames = personNames.toSet.filter(_!="")
+    nonNilNames map {name => new Person(0,name)}
+  }
+  def getRoles(): Set[Role] = {
+    val roleNames = roleAndBuddyContent.flatMap { line =>
+      line.split(",").toList.drop(1).take(1)
+    } ++ teamContent.flatMap { line =>
+      line.split(",").toList.drop(1)
+    }
+    val nonNilNames = roleNames.toSet.filter(_!="")
+    nonNilNames map {name => new Role(0,name)}
+  }
+  def getConnections(persons: Set[Person]): Set[Connection] = {
+    val nameToId = persons.map { case p => (p.name, p.id) } toMap
+
+    getNameToNamePairs flatMap {
+      case (n1, n2) => nameToId.get(n1).flatMap { l1 =>
+        nameToId.get(n2).map { l2 =>
+          new Connection(l1,l2)
+        }
+      }
+    }
+  }
+  def getNameToNamePairs(): Set[(String, String)] = {
+    roleAndBuddyContent.flatMap { line =>
+      line.split(",").toList match {
+        case name::_::matches => matches flatMap {m => List((m,name), (name,m))}
+        case _ => Nil
+      }
+    } toSet
+  }
+  def getRolePersons(persons: Set[Person], roles: Set[Role]): Set[RolePerson] = {
+    val personNameToId = persons.map { case p => (p.name, p.id) } toMap
+    val roleNameToId = roles.map { case r => (r.name, r.id) } toMap
+
+    getNameToRolePairs flatMap {
+      case (person, role) => personNameToId.get(person).flatMap { personId =>
+        roleNameToId.get(role).map { roleId =>
+          new RolePerson(personId, roleId)
+        }
+      }
+    }
+  }
+  def getNameToRolePairs(): Set[(String, String)] = {
+    val roles: Set[(String,String)] = roleAndBuddyContent.flatMap { line =>
+      line.split(",").toList match {
+        case name::role::_ => Some(name, role)
+        case _ => None
+      }
+    }  toSet
+    val teams: Set[(String, String)] = teamContent.flatMap { line =>
+      line.split(",").toList match {
+        case name::teams => teams map {t => (name, t)}
+        case _ => Nil
+      }
+    } toSet
+
+    roles ++ teams
   }
 }

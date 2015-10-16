@@ -1,5 +1,6 @@
 package com.lunchup
 
+import com.lunchup.data.SurveyData
 import com.lunchup.init.{DatabaseInit, DatabaseSessionSupport}
 import com.lunchup.models.{LunchupDb, Person}
 import org.scalatra._
@@ -19,9 +20,8 @@ class LunchupController extends ScalatraServlet
     val connections = from(LunchupDb.connections)(select(_))
     val roles = from(LunchupDb.roles)(select(_))
     val rolePersons = from(LunchupDb.rolePersons)(select(_))
-    println(persons.toList)
 
-    ssp("/index",
+    ssp("/index.ssp",
       "persons" -> persons,
       "connections" -> connections,
       "roles" -> roles,
@@ -32,7 +32,15 @@ class LunchupController extends ScalatraServlet
   get("/create-db") {
     contentType = "text/html"
 
+    LunchupDb.drop
     LunchupDb.create
+    LunchupDb.persons.insert(SurveyData.getPersons())
+    val persons = from(LunchupDb.persons)(select(_)).toList
+    LunchupDb.roles.insert(SurveyData.getRoles())
+    val roles = from(LunchupDb.roles)(select(_)).toList
+    LunchupDb.connections.insert(SurveyData.getConnections(persons.toSet))
+    LunchupDb.rolePersons.insert(SurveyData.getRolePersons(persons.toSet, roles.toSet))
+
     redirect("/")
   }
 
