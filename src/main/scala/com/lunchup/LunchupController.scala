@@ -23,7 +23,7 @@ class LunchupController extends ScalatraServlet
     val rolePersons = from(LunchupDb.rolePersons)(select(_))
     println(persons.toList)
 
-    ssp("/articles/index",
+    ssp("/index",
       "persons" -> persons,
       "connections" -> connections,
       "teams" -> teams,
