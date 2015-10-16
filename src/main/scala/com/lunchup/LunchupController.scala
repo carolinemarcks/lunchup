@@ -16,19 +16,9 @@ class LunchupController extends ScalatraServlet
 
   get("/") {
     contentType = "text/html"
-    val persons = from(LunchupDb.persons)(select(_))
-    val connections = from(LunchupDb.connections)(select(_))
-    val roles = from(LunchupDb.roles)(select(_))
-    val rolePersons = from(LunchupDb.rolePersons)(select(_))
-
-    ssp("/index.ssp",
-      "persons" -> persons,
-      "connections" -> connections,
-      "roles" -> roles,
-      "rolePersons" -> rolePersons
-    )
+    ssp("/index.ssp")
   }
-  
+
   get("/create-db") {
     contentType = "text/html"
 
@@ -43,12 +33,36 @@ class LunchupController extends ScalatraServlet
 
     redirect("/")
   }
+  get("/allData") {
+    contentType = "text/html"
+    val persons = from(LunchupDb.persons)(select(_))
+    val connections = from(LunchupDb.connections)(select(_))
+    val roles = from(LunchupDb.roles)(select(_))
+    val rolePersons = from(LunchupDb.rolePersons)(select(_))
 
-  get("/caroline") {
-    contentType="text/html"
-      jade("/index.jade", "layout" -> "",
-          "pageName" -> "LunchUp",
-          "text" -> "Hey There")
+    ssp("/allData.ssp",
+      "persons" -> persons,
+      "connections" -> connections,
+      "roles" -> roles,
+      "rolePersons" -> rolePersons
+    )
+  }
+  get("/lunchme") {
+    contentType = "text/html"
+
+    val name = params("name")
+    if (name != "") {
+      try {
+        val person = from(LunchupDb.persons)(p => where(p.name === name) select(p)).toList.head
+        ssp("/lunchme.ssp",
+          "person" -> p
+        )
+      } catch {
+        case e: java.util.NoSuchElementException => ssp("/fail.ssp", "name" -> name)
+        case e => println(e)
+          ssp("/fail.ssp", "name" -> name)
+      }
+    } else ssp("/fail.ssp", "name" -> name)
   }
 
   post("/person/:name") {
