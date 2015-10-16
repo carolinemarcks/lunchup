@@ -1,5 +1,7 @@
 package com.lunchup.models
 
+import java.util.Date
+
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.Schema
 import org.squeryl.annotations.Column
@@ -61,11 +63,36 @@ object RolePerson {
   }
 }
 
+class MatchRequest(val id: Long, val requesterId: Long, val fulfilled: Boolean) extends ScalatraRecord {
+  def this() = this(0,0, false)
+}
+object MatchRequest {
+  def create(matchRequest: MatchRequest): Boolean = {
+    inTransaction {
+      val result = LunchupDb.matchRequests.insert(matchRequest)
+      result.isPersisted
+    }
+  }
+}
+class MatchResult(val id: Long, val personAId: Long, val personBId: Long, val goodness: Int) extends ScalatraRecord {
+  def this() = this(0, 0, 0, 0)
+}
+object MatchResult {
+  def create(matchResult: MatchResult): Boolean = {
+    inTransaction {
+      val result = LunchupDb.matchResults.insert(matchResult)
+      result.isPersisted
+    }
+  }
+}
+
 object LunchupDb extends Schema {
   val persons = table[Person]("persons")
   val connections = table[Connection]("connections")
   val roles = table[Role]("roles")
   val rolePersons = table[RolePerson]("role_persons")
+  val matchRequests = table[MatchRequest]("match_requests")
+  val matchResults = table[MatchResult]("match_results")
 
   on(persons)(p => declare (
     p.id is(autoIncremented),
@@ -73,6 +100,12 @@ object LunchupDb extends Schema {
     ))
   on(roles)(r => declare(
     r.id is(autoIncremented)
+  ))
+  on(matchResults)(result => declare(
+    result.id is(autoIncremented)
+  ))
+  on(matchRequests)(request => declare(
+    request.id is(autoIncremented)
   ))
 }
 

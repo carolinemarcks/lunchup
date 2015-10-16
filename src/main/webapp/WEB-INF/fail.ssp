@@ -1,0 +1,6 @@
+<% import org.squeryl.Query %>
+<%@ val err:String%>
+
+<div class="row">
+  <p><%=err%> </p>
+</div>
