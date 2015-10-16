@@ -1,0 +1,55 @@
+<% import org.scalatra.example.models.Person %>
+<% import org.scalatra.example.models.Connection %>
+<% import org.scalatra.example.models.Team %>
+<% import org.scalatra.example.models.TeamPerson %>
+<% import org.scalatra.example.models.Role %>
+<% import org.scalatra.example.models.RolePerson %>
+
+<% import org.squeryl.Query %>
+<%@ val persons:Query[Person]%>
+<%@ val connections:Query[Connection]%>
+<%@ val teams:Query[Team]%>
+<%@ val teamPersons:Query[TeamPerson]%>
+<%@ val roles:Query[Role]%>
+<%@ val rolePersons:Query[RolePerson]%>
+
+<div class="row">
+  <div class="span8">
+    <h2>Persons</h2>
+    #for(person <- persons.toList)
+        <p><%= person.name %></p>
+    #end
+  </div>
+  <div class="span8">
+    <h2>Connections</h2>
+    #for(connection <- connections.toList)
+        <p><%= connection.pAId %> -> <%= connection.pBId %></p>
+    #end
+  </div>
+  <div class="span8">
+    <h2>Teams</h2>
+    #for(team <- teams.toList)
+        <p><%= team.name %> </p>
+    #end
+  </div>
+  <div class="span8">
+    <h2>TeamPerson</h2>
+    #for(tp <- teamPersons.toList)
+        <p><%= tp.teamId %> -> <%= tp.personId %></p>
+    #end
+  </div>
+
+  <div class="span8">
+    <h2>Roles</h2>
+    #for(role <- roles.toList)
+        <p><%= role.name %> </p>
+    #end
+  </div>
+  <div class="span8">
+    <h2>RolePersons</h2>
+    #for(rp <- rolePersons.toList)
+        <p><%= rp.roleId %> -> <%= rp.personId %></p>
+    #end
+  </div>
+
+</div>
