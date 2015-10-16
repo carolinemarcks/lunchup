@@ -218,4 +218,7 @@ object SurveyData {
 
     roles ++ teams
   }
+  def getOptInNames(): Set[String] = {
+    roleAndBuddyContent.flatMap {_.split(",").toList.headOption} filter(_!="") toSet
+  }
 }

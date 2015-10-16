@@ -74,8 +74,8 @@ object MatchRequest {
     }
   }
 }
-class MatchResult(val id: Long, val personAId: Long, val personBId: Long, val time: Date) extends ScalatraRecord {
-  def this() = this(0, 0, 0, new Date())
+class MatchResult(val id: Long, val personAId: Long, val personBId: Long, val goodness: Int) extends ScalatraRecord {
+  def this() = this(0, 0, 0, 0)
 }
 object MatchResult {
   def create(matchResult: MatchResult): Boolean = {
@@ -100,6 +100,12 @@ object LunchupDb extends Schema {
     ))
   on(roles)(r => declare(
     r.id is(autoIncremented)
+  ))
+  on(matchResults)(result => declare(
+    result.id is(autoIncremented)
+  ))
+  on(matchRequests)(request => declare(
+    request.id is(autoIncremented)
   ))
 }
 

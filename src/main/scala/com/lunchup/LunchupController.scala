@@ -1,8 +1,10 @@
 package com.lunchup
 
+import scala.collection.mutable
+
 import com.lunchup.data.SurveyData
 import com.lunchup.init.{DatabaseInit, DatabaseSessionSupport}
-import com.lunchup.models.{LunchupDb, Person}
+import com.lunchup.models._
 import org.scalatra._
 import scalate.ScalateSupport
 import org.squeryl.PrimitiveTypeMode._
@@ -57,6 +59,7 @@ class LunchupController extends ScalatraServlet
     params.get("name").map { name =>
       try {
         val person = from(LunchupDb.persons)(p => where(p.name === name) select(p)).toList.head
+        //would do inserting of MatchRequest into DB here, but not for hackathon
         ssp("/lunchme.ssp",
           "person" -> person
         )
@@ -76,8 +79,8 @@ class LunchupController extends ScalatraServlet
           val myMatch = from(LunchupDb.matchResults, LunchupDb.persons)((matchResult, person) =>
             where(matchResult.personAId === me.id and matchResult.personBId === person.id)
               select (person)
-              orderBy (matchResult.time)
-          ).toList.reverse.head
+              orderBy (matchResult.id desc)
+          ).toList.head
 
           ssp("/myMatch.ssp",
             "me" -> me,
@@ -95,6 +98,57 @@ class LunchupController extends ScalatraServlet
       }
     } getOrElse ssp("/fail.ssp", "err" -> "Please supply a name!")
   }
+  post("/makeMatchRequests") {
+    contentType = "text/html"
+    val optInNames = SurveyData.getOptInNames()
+    val optInPersons = from(LunchupDb.persons)(p =>
+      where(p.name in optInNames)
+      select(p)
+    )
+    val matchRequests = optInPersons.map { p =>
+      new MatchRequest(0, p.id, false)
+    }
+    LunchupDb.matchRequests.insert(matchRequests)
+    redirect("/")
+  }
+  post("/makeMatches") {
+    val matchRequests = from(LunchupDb.matchRequests)(select(_)).toList
+    redirect("/")
+  }
+  var graph: Set[Node] = Set.empty
+
+  def makeGraph = {
+    val persons: Set[Person] = from(LunchupDb.persons)(select(_)).toSet
+    val rolePersons: Set[RolePerson] = from(LunchupDb.rolePersons)(select(_)).toSet
+    val personsByTeam = rolePersons.groupBy(_.roleId).mapValues(_.map(_.personId))
+    val connections: Set[Connection]  = from(LunchupDb.connections)(select(_)).toSet
+    val optInNames: Set[String] = SurveyData.getOptInNames()
+    val baseNodes = persons map {p => Node(p, mutable.Set.empty, optInNames.contains(p.name))}
+
+    val nodesByPersonId = baseNodes.map {node => (node.person.id, node)} toMap
+
+    for {
+      connection <- connections
+      nodeA <- nodesByPersonId.get(connection.pAId)
+      nodeB <- nodesByPersonId.get(connection.pBId)
+    } {
+      nodeA.connections.add(nodeB)
+      nodeB.connections.add(nodeA)
+    }
+    for {
+      (team, persons) <- personsByTeam
+      personA <- persons
+      personB <- persons if personA > personB
+      nodeA <- nodesByPersonId.get(personA)
+      nodeB <- nodesByPersonId.get(personB)
+    } {
+      nodeA.connections.add(nodeB)
+      nodeB.connections.add(nodeA)
+    }
+
+    graph = baseNodes
+  }
+  case class Node(val person: Person, val connections: mutable.Set[Node], var optIn: Boolean)
 
   post("/person/:name") {
     val name = params("name")
