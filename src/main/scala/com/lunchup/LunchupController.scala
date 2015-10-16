@@ -112,20 +112,48 @@ class LunchupController extends ScalatraServlet
     redirect("/")
   }
   post("/makeMatches") {
-    val matchRequests = from(LunchupDb.matchRequests)(select(_)).toList
+    val matchRequests = from(LunchupDb.matchRequests)(select(_)).toSet
+    val alreadyMatched : mutable.Set[Long] = mutable.Set.empty
+    val matchResults: mutable.Set[MatchResult] = mutable.Set.empty
+    for {
+      requestee <- matchRequests
+      if ! alreadyMatched.contains(requestee.requesterId)
+    } {
+      val connections: Set[Long] = from(LunchupDb.connections)(c => where(c.pAId === requestee.requesterId) select(c.pBId)).toSet
+      val result = matchRequests.find(mr =>
+        mr != requestee
+          && !(connections contains mr.requesterId)
+          && !(alreadyMatched contains mr.requesterId)
+      )
+
+      result map { r =>
+          matchResults.add(new MatchResult(0, r.requesterId, requestee.requesterId, 0))
+          matchResults.add(new MatchResult(0, requestee.requesterId, r.requesterId, 0))
+          alreadyMatched.add(r.requesterId)
+          alreadyMatched.add(requestee.requesterId)
+      }
+    }
+    val notMatched = matchRequests.map(_.requesterId) -- alreadyMatched
+    println(s"not matched $notMatched")
+    LunchupDb.matchResults.insert(matchResults)
     redirect("/")
   }
+  /*
   var graph: Set[Node] = Set.empty
+  post("/makeGraph") {
+    makeGraph()
+    redirect("/")
+  }
 
-  def makeGraph = {
+  def makeGraph() = {
     val persons: Set[Person] = from(LunchupDb.persons)(select(_)).toSet
     val rolePersons: Set[RolePerson] = from(LunchupDb.rolePersons)(select(_)).toSet
     val personsByTeam = rolePersons.groupBy(_.roleId).mapValues(_.map(_.personId))
     val connections: Set[Connection]  = from(LunchupDb.connections)(select(_)).toSet
     val optInNames: Set[String] = SurveyData.getOptInNames()
-    val baseNodes = persons map {p => Node(p, mutable.Set.empty, optInNames.contains(p.name))}
+    val baseNodes = persons map {p => Node(p.id, mutable.Set.empty, optInNames.contains(p.name))}
 
-    val nodesByPersonId = baseNodes.map {node => (node.person.id, node)} toMap
+    val nodesByPersonId = baseNodes.map {node => (node.person, node)} toMap
 
     for {
       connection <- connections
@@ -147,9 +175,38 @@ class LunchupController extends ScalatraServlet
     }
 
     graph = baseNodes
-  }
-  case class Node(val person: Person, val connections: mutable.Set[Node], var optIn: Boolean)
 
+  }
+  get("/isConnected") {
+    contentType="text/html"
+
+    ssp("/fail.ssp",
+      "err" -> s"$isConnected")
+  }
+  def makeMatches = {
+    val alreadyMatched: mutable.Set[Person] = mutable.Set.empty
+    val matches: mutable.Set[MatchResult] = mutable.Set.empty
+    for {
+      node <- graph
+    } {
+
+    }
+  }
+  def isConnected: Boolean = {
+    val seen: mutable.Set[Node] = mutable.Set.empty
+    def search(node: Node): Unit = {
+      seen.add(node)
+      val more = node.connections -- seen
+      more.foreach(search(_))
+    }
+    seen.size == graph.size
+  }
+
+  def furthestNode(start: Node) = {
+    val seen: mutable.Set[Node] = mutable.Set.empty
+  }
+  case class Node(val person: Long, val connections: mutable.Set[Node], val optIn: Boolean)
+*/
   post("/person/:name") {
     val name = params("name")
     println(s"got a person $name")
